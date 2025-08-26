@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Analytics Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="chart.js"></script>
+</head>
+<body class="light-mode">
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Cliff Dive <span class="beta-tag">Beta</span></h1>
+        <p>Usage Insights</p>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active" data-section="overview">
+          <span class="nav-icon">📊</span>
+          Overview
+        </a>
+        <a href="#platforms" class="nav-item" data-section="platforms">
+          <span class="nav-icon">🔧</span>
+          Platforms
+        </a>
+        <a href="#ai-tools" class="nav-item" data-section="ai-tools">
+          <span class="nav-icon">🛠️</span>
+          AI Tools
+        </a>
+        <a href="#settings" class="nav-item" data-section="settings">
+          <span class="nav-icon">⚙️</span>
+          Settings
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="status-indicator">
+          <span class="status-dot"></span>
+          <span>Active Monitoring</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle" id="darkModeToggle">
+      <span class="toggle-icon">🌙</span>
+      <span class="toggle-icon">☀️</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <div class="header-left">
+          <h2 id="sectionTitle">Overview</h2>
+          <p id="sectionDescription">Your AI usage analytics and insights</p>
+        </div>
+        
+        <div class="header-right">
+          <div class="date-picker">
+                            <select id="dateRangeSelect" class="date-range-select">
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="this-week">This Week</option>
+                  <option value="last-week">Last Week</option>
+                  <option value="last-month">Last Month</option>
+                  <option value="custom">Custom Date Range</option>
+                </select>
+            
+            <div id="customDateRange" class="custom-date-range" style="display: none;">
+              <input type="date" id="startDate" class="date-input" placeholder="Start Date">
+              <span class="date-separator">to</span>
+              <input type="date" id="endDate" class="date-input" placeholder="End Date">
+            </div>
+          </div>
+          
+          <div class="header-actions">
+            <button class="btn btn-secondary" id="exportBtn">
+              <span class="btn-icon">📤</span>
+              Export
+            </button>
+            <button class="btn btn-primary" id="refreshBtn">
+              <span class="btn-icon">🔄</span>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Sections -->
+      <div class="content-area">
+        <!-- Overview Section -->
+        <section id="overview" class="content-section active">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>Total Sessions</h3>
+                <span class="stat-icon">🕒</span>
+                <div class="info-icon" data-tooltip="A continuous period of AI tool usage until 2 minutes of inactivity or tool closure">ⓘ</div>
+              </div>
+              <div class="stat-value" id="totalSessions">0</div>
+              <div class="stat-change" id="sessionsChange">No data yet</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>Time Spent</h3>
+                <span class="stat-icon">⏱️</span>
+              </div>
+              <div class="stat-value" id="totalTime">0h</div>
+              <div class="stat-change" id="timeChange">No data yet</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>Messages Sent</h3>
+                <span class="stat-icon">📤</span>
+                <div class="info-icon" data-tooltip="Number of messages or prompts sent to AI tools">ⓘ</div>
+              </div>
+              <div class="stat-value" id="messagesSent">0</div>
+              <div class="stat-change" id="messagesSentChange">No data yet</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>Responses</h3>
+                <span class="stat-icon">📥</span>
+                <div class="info-icon" data-tooltip="Number of AI-generated responses received">ⓘ</div>
+              </div>
+              <div class="stat-value" id="messagesReceived">0</div>
+              <div class="stat-change" id="messagesReceivedChange">No data yet</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <h3>Avg Session</h3>
+                <span class="stat-icon">📊</span>
+                <div class="info-icon" data-tooltip="Total time spent using AI tools divided by the number of sessions">ⓘ</div>
+              </div>
+              <div class="stat-value" id="avgSession">0m</div>
+              <div class="stat-change" id="avgSessionChange">No data yet</div>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h3>Platform Usage</h3>
+              <canvas id="platformChart"></canvas>
+            </div>
+            
+            <div class="chart-card">
+              <h3>Daily Activity</h3>
+              <canvas id="activityChart"></canvas>
+            </div>
+          </div>
+
+          <div class="section-divider">
+            <h3>Usage Trends</h3>
+          </div>
+
+          <div class="trends-charts">
+            <div class="chart-card full-width">
+              <h3>Usage Over Time</h3>
+              <canvas id="trendsChart"></canvas>
+            </div>
+          </div>
+
+          <div class="section-divider">
+            <h3>Productivity Insights</h3>
+          </div>
+
+          <div class="productivity-grid">
+            <div class="productivity-card">
+              <h4>Peak Usage Times</h4>
+              <canvas id="peakTimesChart"></canvas>
+            </div>
+            
+            <div class="productivity-card">
+              <h4>Session Patterns</h4>
+              <canvas id="sessionPatternsChart"></canvas>
+            </div>
+            
+            <div class="productivity-card">
+              <div class="metric-header">
+                <h4>Platform Efficiency</h4>
+                <div class="info-icon tooltip-bottom" data-tooltip="Ratio of successful interactions to total time spent, indicating overall tool usage effectiveness">ⓘ</div>
+              </div>
+              <div class="efficiency-list" id="efficiencyList">
+                <!-- Efficiency metrics will be populated here -->
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider">
+            <h3>Recent Activity</h3>
+          </div>
+
+          <div class="recent-activity">
+            <div class="activity-list" id="recentActivity">
+              <div class="no-data">No recent activity</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Platforms Section -->
+        <section id="platforms" class="content-section">
+          <div class="platforms-header">
+            <h3>AI Platform Usage</h3>
+            <div class="platform-filters">
+              <select id="platformFilter" class="filter-select">
+                <option value="all">All Platforms</option>
+                <option value="tier1">Tier 1 (High Confidence)</option>
+                <option value="tier2">Tier 2 (Medium Confidence)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="platforms-grid" id="platformsGrid">
+            <!-- Platform cards will be populated here -->
+          </div>
+        </section>
+
+        <!-- AI Tools Section -->
+        <section id="ai-tools" class="content-section">
+          <div class="ai-tools-header">
+            <h3>AI Tools Directory</h3>
+            <p class="section-description">Explore and discover AI tools to enhance your workflow</p>
+          </div>
+
+          <div class="tools-categories">
+            <!-- Large Language Models -->
+            <div class="tool-category">
+              <h4>🤖 Large Language Models</h4>
+              <div class="tools-grid" id="llm-tools">
+                <!-- LLM tools will be populated here -->
+              </div>
+            </div>
+
+            <!-- AI Search & Research -->
+            <div class="tool-category">
+              <h4>🔍 AI Search & Research</h4>
+              <div class="tools-grid" id="search-tools">
+                <!-- Search tools will be populated here -->
+              </div>
+            </div>
+
+            <!-- AI Creative Tools -->
+            <div class="tool-category">
+              <h4>🎨 AI Creative Tools</h4>
+              <div class="tools-grid" id="creative-tools">
+                <!-- Creative tools will be populated here -->
+              </div>
+            </div>
+
+            <!-- AI Writing Tools -->
+            <div class="tool-category">
+              <h4>📝 AI Writing Tools</h4>
+              <div class="tools-grid" id="writing-tools">
+                <!-- Writing tools will be populated here -->
+              </div>
+            </div>
+
+            <!-- AI Productivity Tools -->
+            <div class="tool-category">
+              <h4>📊 AI Productivity Tools</h4>
+              <div class="tools-grid" id="productivity-tools">
+                <!-- Productivity tools will be populated here -->
+              </div>
+            </div>
+
+            <!-- AI SEO Tools -->
+            <div class="tool-category">
+              <h4>🔍 AI SEO Tools</h4>
+              <div class="tools-grid" id="seo-tools">
+                <!-- SEO tools will be populated here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Section (Future) -->
+          <div class="admin-section" id="adminSection" style="display: none;">
+            <div class="admin-header">
+              <h4>🔧 Admin Tools</h4>
+              <p>Add custom tools to track (Admin only)</p>
+            </div>
+            <div class="add-tool-form" id="addToolForm">
+              <div class="form-row">
+                <input type="text" id="toolName" placeholder="Tool Name" class="form-input">
+                <input type="url" id="toolUrl" placeholder="Tool URL" class="form-input">
+              </div>
+              <div class="form-row">
+                <select id="toolCategory" class="form-select">
+                  <option value="llm">Large Language Models</option>
+                  <option value="search">AI Search & Research</option>
+                  <option value="creative">AI Creative Tools</option>
+                  <option value="writing">AI Writing Tools</option>
+                  <option value="productivity">AI Productivity Tools</option>
+                  <option value="seo">AI SEO Tools</option>
+                  <option value="custom">Custom</option>
+                </select>
+                <input type="text" id="toolDomain" placeholder="Domain (e.g., example.com)" class="form-input">
+              </div>
+              <div class="form-row">
+                <textarea id="toolDescription" placeholder="Tool description..." class="form-textarea"></textarea>
+              </div>
+              <button type="button" id="addToolBtn" class="btn btn-primary">Add Tool</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section">
+          <div class="settings-header">
+            <h3>Settings & Privacy</h3>
+          </div>
+
+          <div class="settings-grid">
+            <div class="settings-card">
+              <h4>Privacy Controls</h4>
+              <div class="setting-item">
+                <label class="toggle-label">
+                  <input type="checkbox" id="workHoursOnly" checked>
+                  <span class="toggle-slider"></span>
+                  Track work hours only
+                </label>
+                <p class="setting-description">Only monitor AI usage during specified work hours</p>
+              </div>
+              
+              <div class="setting-item">
+                <label class="toggle-label">
+                  <input type="checkbox" id="individualOptOut">
+                  <span class="toggle-slider"></span>
+                  Individual opt-out
+                </label>
+                <p class="setting-description">Exclude your data from team analytics</p>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <h4>Work Hours</h4>
+              <div class="time-settings">
+                <div class="time-input">
+                  <label>Start Time</label>
+                  <input type="time" id="workStart" value="09:00">
+                </div>
+                <div class="time-input">
+                  <label>End Time</label>
+                  <input type="time" id="workEnd" value="17:00">
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <h4>Data Management</h4>
+              <div class="data-actions">
+                <button class="btn btn-secondary" id="exportAllData">
+                  Export All Data
+                </button>
+                <button class="btn btn-danger" id="clearData">
+                  Clear All Data
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Load jsPDF and its dependencies -->
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="lib/jspdf.plugin.autotable.min.js"></script>
+  <!-- Load dashboard script -->
+  <script src="dashboard.js"></script>
+</body>
+</html> 

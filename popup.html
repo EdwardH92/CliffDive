@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Analytics</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <h1>AI Analytics</h1>
+      <div class="status-indicator" id="statusIndicator">
+        <span class="status-dot"></span>
+        <span class="status-text">Active</span>
+      </div>
+    </header>
+
+    <main class="popup-content">
+      <!-- Quick Stats -->
+      <section class="quick-stats">
+        <h2>Today's Usage</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="todaySessions">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="todayTime">0m</div>
+            <div class="stat-label">Time Spent</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Platform Usage -->
+      <section class="platform-usage">
+        <h2>Top Platforms</h2>
+        <div class="platform-list" id="platformList">
+          <div class="no-data">No AI usage detected yet</div>
+        </div>
+      </section>
+
+      <!-- Privacy Controls -->
+      <section class="privacy-controls">
+        <h2>Privacy Settings</h2>
+        <div class="setting-item">
+          <label class="toggle-label">
+            <input type="checkbox" id="workHoursOnly" checked>
+            <span class="toggle-slider"></span>
+            Work hours only
+          </label>
+        </div>
+        <div class="setting-item">
+          <label class="toggle-label">
+            <input type="checkbox" id="individualOptOut">
+            <span class="toggle-slider"></span>
+            Individual opt-out
+          </label>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="actions">
+        <button class="btn btn-primary" id="openDashboard">
+          <span class="btn-icon">📊</span>
+          Open Dashboard
+        </button>
+        <button class="btn btn-secondary" id="exportData">
+          <span class="btn-icon">📤</span>
+          Export Data
+        </button>
+        <button class="btn btn-secondary" id="openTestPage">
+          <span class="btn-icon">🧪</span>
+          Test Extension
+        </button>
+      </section>
+    </main>
+
+    <footer class="popup-footer">
+      <button class="privacy-info-btn" id="privacyInfo">Privacy Info</button>
+    </footer>
+  </div>
+
+  <!-- Privacy Modal -->
+  <div class="modal" id="privacyModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Privacy & Data Collection</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>What We Track:</h4>
+        <ul>
+          <li>✅ Time spent on AI platforms</li>
+          <li>✅ Interaction patterns (clicks, inputs)</li>
+          <li>✅ Platform usage frequency</li>
+          <li>✅ Session duration and activity</li>
+        </ul>
+        
+        <h4>What We DON'T Track:</h4>
+        <ul>
+          <li>❌ Actual content or messages</li>
+          <li>❌ Personal conversations</li>
+          <li>❌ Screenshots or visual data</li>
+          <li>❌ Keystroke logging</li>
+        </ul>
+        
+        <p><strong>All data is stored locally and never sent to external servers.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "CliffDive Analytics",
+  "version": "1.0",
+  "description": "Track AI tool usage and provide analytics",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "lib/*",
+      "dashboard.html",
+      "dashboard.css",
+      "dashboard.js",
+      "chart.js",
+      "test-suite.html",
+      "test-suite.js",
+      "debug-core.js",
+      "debug-platforms.js",
+      "debug-dashboard.js",
+      "debug-data.js",
+      "debug-utilities.js"
+    ],
+    "matches": ["<all_urls>"]
+  }],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+} 
